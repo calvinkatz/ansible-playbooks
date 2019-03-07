@@ -1,0 +1,10 @@
+# variables that are visible from all roles
+
+# Use HTTP, port 5985, Kerberos per GPO
+# windows_bridge: 'pb18answin01.mhs.int'
+ansible_user: "{{ vault_windows_admin }}"
+ansible_password: "{{ vault_windows_adminpass }}"
+ansible_port: 5985
+ansible_connection: winrm
+ansible_winrm_transport: kerberos
+ansible_winrm_server_cert_validation: ignore

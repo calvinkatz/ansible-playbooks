@@ -1,0 +1,6 @@
+---
+- name: Update Servers
+  hosts: all
+  serial: 1
+  roles:
+    - common

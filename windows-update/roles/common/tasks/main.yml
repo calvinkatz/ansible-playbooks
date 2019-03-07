@@ -1,0 +1,45 @@
+---
+- name: Get VM Folder location
+  vmware_guest_find:
+    hostname: "{{ vcenter_server }}"
+    username: "{{ ansible_user }}"
+    password: "{{ ansible_password }}"
+    name: "{{ inventory_hostname | regex_replace('\\.domain\\.com') }}"
+  register: vm_folder
+  delegate_to: localhost
+
+- name: Set Datacenter
+  set_fact:
+    location_dc: "{{ vm_folder.folders | first | regex_search('^/\\w{1,64}') }}"
+
+- name: Snapshot VM
+  vmware_guest_snapshot:
+    hostname: "{{ vcenter_server }}"
+    username: "{{ ansible_user }}"
+    password: "{{ ansible_password }}"
+    datacenter: "{{ location_dc }}"
+    name: "{{ inventory_hostname | regex_replace('\\.domain\\.com') }}"
+    folder: "{{ vm_folder.folders | first }}"
+    state: present
+    snapshot_name: Before_Updates
+    quiesce: True
+    memory_dump: False
+  delegate_to: localhost
+
+- name: Apply updates
+  win_updates:
+    reboot: yes
+    category_names:
+      - Application
+      - Connectors
+      - CriticalUpdates
+      - DefinitionUpdates
+      - DeveloperKits
+      - FeaturePacks
+      - Guidance
+      - SecurityUpdates
+      - ServicePacks
+      - Tools
+      - UpdateRollups
+      - Updates
+  register: update_result
