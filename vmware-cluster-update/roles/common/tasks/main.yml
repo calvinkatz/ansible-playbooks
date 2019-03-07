@@ -1,0 +1,8 @@
+---
+- name: Copy update script
+  win_copy:
+    src: files/update-cluster.ps1
+    dest: C:\Temp
+
+- name: Run update script
+  win_shell: C:\Temp\update-cluster.ps1 -ClusterName {{ vcenter_cluster }} -vCenterServer {{ vcenter_server }}

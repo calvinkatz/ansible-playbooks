@@ -1,0 +1,8 @@
+# Use Windows bridge as host inventory
+# Windows bridge will need PowerCLI installed
+---
+- name: Update Cluster
+  hosts: all
+  serial: 1
+  roles:
+    - common

@@ -1,6 +1,12 @@
 ---
-- name: Update Servers
-  hosts: all
+- name: Update Virtual Servers
+  hosts: virtual
   serial: 1
   roles:
-    - common
+    - virtual
+
+- name: Update Physical Servers
+  hosts: physical
+  serial: 1
+  roles:
+    - physical

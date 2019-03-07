@@ -1,0 +1,5 @@
+[primary]
+windows.domain.com
+
+[primary:vars]
+vcenter_cluster=ESX

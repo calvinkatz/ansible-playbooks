@@ -7,7 +7,15 @@ vcenter_server=vcenter1.domain.com
 
 [secondary]
 server3.domain.com
-server3.domain.com
+server4.domain.com
 
 [secondary:vars]
 vcenter_server=vcenter2.domain.com
+
+[virtual:children]
+primary
+secondary
+
+[physical]
+server5.domain.com
+server6.domain.com
