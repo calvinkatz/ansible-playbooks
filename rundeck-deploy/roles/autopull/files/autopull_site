@@ -1,0 +1,11 @@
+server {
+      listen 27000 ssl;
+      server_name <server_fqdn>;
+      ssl_certificate     /opt/rundeck/server_cert.pem;
+      ssl_certificate_key /opt/rundeck/server_key.pem;
+      root /var/www/html;
+      location ~ \.php$ {
+           include snippets/fastcgi-php.conf;
+           fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+      }
+}

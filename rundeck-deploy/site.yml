@@ -1,0 +1,10 @@
+# Work in progress
+---
+- name: Deploy Rundeck
+  hosts: all
+  serial: 1
+  roles:
+    - ansible
+    - mariadb
+    - rundeck
+    - autopull

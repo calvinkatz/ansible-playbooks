@@ -1,0 +1,3 @@
+# variables that are visible from all roles
+mariadb_secret: "{{ vault_mariadb_secret }}"
+rundeck_secret: "{{ vault_rundeck_secret }}"

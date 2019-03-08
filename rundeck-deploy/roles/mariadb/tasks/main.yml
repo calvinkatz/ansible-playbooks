@@ -1,0 +1,27 @@
+---
+- name: Install MariaDB
+  apt:
+    name:
+      - mariadb-server
+    update_cache: yes
+
+- name: Secure MariaDB and create Rundeck DB
+  shell: |
+    # Make sure that NOBODY can access the server without a password
+    mysql -e "UPDATE mysql.user SET Password = PASSWORD('"{{ mariadb_secret }}"') WHERE User = 'root';"
+    # Remove remote login
+    mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+    # Kill the anonymous users
+    sudo mysql -e "DROP USER ''@'localhost';"
+    # Because our hostname varies we'll use some Bash magic here.
+    mysql -e "DROP USER ''@'$(hostname)'"
+    # Kill off the demo database
+    mysql -e "DROP DATABASE test;"
+    # Create Rundeck DB
+    mysql -e "CREATE DATABASE rundeck;""
+    # Create Rundeck User
+    mysql -e "GRANT ALL on rundeck.* to 'rundeckuser' identified by '"{{ rundeck_secret }}"';
+    # Make our changes take effect
+    mysql -e "FLUSH PRIVILEGES;"
+    # Any subsequent tries to run queries this way will get access denied because lack of usr/pwd param
+  become: yes

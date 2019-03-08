@@ -1,0 +1,29 @@
+---
+- name: Install PHP FastCGI and Git
+  apt:
+    name:
+      - php-fpm
+      - git
+    update_cache: yes
+
+- name: Copy certificate
+  copy: src={{ item.src }} dest={{ item.dest }} mode='0400'
+  with_items:
+    - { src: 'files/server_cert.pem', dest: '/opt/rundeck' }
+    - { src: 'files/server_key.pem', dest: '/opt/rundeck' }
+
+- name: Add autopull site
+  copy:
+    src: files/autopull_site
+    dest: /etc/nginx/sites-available/autopull
+
+- name: Link autopull site
+  file:
+    src: /etc/nginx/sites-available/autopull
+    dest: /etc/nginx/sites-enabled/autopull
+    state: link
+
+- name: Copy pull page
+  copy:
+    src: files/pull.php
+    dest: /var/www/html

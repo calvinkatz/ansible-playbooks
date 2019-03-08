@@ -1,0 +1,2 @@
+vault_mariadb_secret: <secret>
+vault_rundeck_secret: <secret>

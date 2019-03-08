@@ -1,0 +1,28 @@
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        server_name <server_fqdn>;
+        return 301 https://<server_fqdn>;
+}
+server {
+      listen 443 ssl;
+      server_name         <server_fqdn>
+      keepalive_timeout   70;
+      ssl_certificate     /opt/rundeck/server_cert.pem;
+      ssl_certificate_key /opt/rundeck/server_key.pem;
+      root                /var/www/html;
+      location / {
+           proxy_pass    http://<server_fqdn>:4440;
+      }
+}
+server {
+      listen 27000 ssl;
+      server_name <server_fqdn>;
+      ssl_certificate     /opt/rundeck/server_cert.pem;
+      ssl_certificate_key /opt/rundeck/server_key.pem;
+      root /var/www/html;
+      location ~ \.php$ {
+           include snippets/fastcgi-php.conf;
+           fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+      }
+}
