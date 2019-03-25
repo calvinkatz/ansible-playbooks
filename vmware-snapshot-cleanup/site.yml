@@ -1,0 +1,16 @@
+# Use Windows bridge as host inventory
+# Windows bridge will need PowerCLI installed
+---
+- name: Cleanup Secondary vCenter
+  hosts: secondary
+  serial: 1
+  gather_facts: no
+  roles:
+    - common
+
+- name: Cleanup Primary vCenter
+  hosts: primary
+  gather_facts: no
+  serial: 1
+  roles:
+    - common

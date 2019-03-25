@@ -19,3 +19,6 @@ secondary
 [physical]
 server5.domain.com
 server6.domain.com
+
+[bridge]
+windows.domain.com

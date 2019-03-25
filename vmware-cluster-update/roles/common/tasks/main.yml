@@ -1,8 +1,10 @@
 ---
-- name: Copy update script
-  win_copy:
-    src: files/update-cluster.ps1
-    dest: C:\Temp
-
 - name: Run update script
-  win_shell: C:\Temp\update-cluster.ps1 -ClusterName {{ vcenter_cluster }} -vCenterServer {{ vcenter_server }}
+  vars:
+    command: "{{ windows_script_dir }}\\vmware\\update-cluster.ps1 -ClusterName {{ vcenter_cluster }} -vCenterServer {{ vcenter_server }}"
+  win_shell: |
+    $username = "{{ ansible_user }}"
+    $password = "{{ ansible_password }}"
+    $password = ConvertTo-SecureString -String $password -AsPlainText -Force
+    $cred = New-Object System.Management.Automation.PSCredential $username,$password
+    {{ command }} -Credential $cred

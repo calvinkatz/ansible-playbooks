@@ -9,18 +9,18 @@ param (
     # vCenter Server
     [Parameter(Mandatory = $true)]
     [string]
-    $vCenterServer
+    $vCenterServer,
+    # Parameter help description
+    [Parameter(Mandatory = $true)]
+    [System.Management.Automation.PSCredential]
+    $Credential
 )
-
-# Import PowerCLI Modules
-Import-Module VMware.PowerCLI
-Import-Module VMware.VumAutomation
 
 # Disable timeout
 Set-PowerCLIConfiguration -Scope Session -WebOperationTimeoutSeconds -1 -Confirm:$false | Out-Null
 
 # Connect VIServer
-Connect-VIServer $vCenterServer
+Connect-VIServer $vCenterServer -Credential $Credential | Out-Null
 
 # Get cluster
 $vmcluster = Get-Cluster -Name $ClusterName

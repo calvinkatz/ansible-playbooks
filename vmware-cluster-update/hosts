@@ -1,5 +1,16 @@
-[primary]
+[bridge]
 windows.domain.com
 
+[primary:children]
+bridge
+
 [primary:vars]
-vcenter_cluster=ESX
+vcenter_server=vcenter01.domain.com
+vcenter_cluster=Cluster
+
+[secondary:children]
+bridge
+
+[secondary:vars]
+vcenter_server=vcenter02.domain.com
+vcenter_cluster=Cluster

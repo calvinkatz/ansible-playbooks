@@ -44,12 +44,14 @@
       - Updates
   register: update_result
 
-- name: Copy VM tools update script
-  win_copy:
-    src: files/update-vmtools.ps1
-    dest: C:\Temp
-  delegate_to: "{{ windows_bridge }}"
-
 - name: Update VM tools
-  win_shell: C:\Temp\update-vmtools.ps1 -VMName "{{ inventory_hostname | regex_replace('\\.domain\\.com') }}" -vCenterServer "{{ vcenter_server }}"
-  delegate_to: "{{ windows_bridge }}"
+  vars:
+    command: "{{ windows_script_dir }}\\vmware\\update-vmtools.ps1 -VMName {{ vm_name }} -vCenterServer {{ vcenter_server }}"
+  win_shell: |
+    $username = "{{ ansible_user }}"
+    $password = "{{ ansible_password }}"
+    $password = ConvertTo-SecureString -String $password -AsPlainText -Force
+    $cred = New-Object System.Management.Automation.PSCredential $username,$password
+    {{ command }} -Credential $cred
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['bridge'] }}"

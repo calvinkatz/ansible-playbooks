@@ -1,0 +1,14 @@
+[bridge]
+windows.domain.com
+
+[primary:children]
+bridge
+
+[primary:vars]
+vcenter_server=vcenter01.domain.com
+
+[secondary:children]
+bridge
+
+[secondary:vars]
+vcenter_server=vcenter02.domain.com

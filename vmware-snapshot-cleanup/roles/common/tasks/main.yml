@@ -1,0 +1,10 @@
+---
+- name: Run cleanup script
+  vars:
+    command: "{{ windows_script_dir }}\\vmware\\snapshot-cleanup.ps1 -vCenterServer {{ vcenter_server }}"
+  win_shell: |
+    $username = "{{ ansible_user }}"
+    $password = "{{ ansible_password }}"
+    $password = ConvertTo-SecureString -String $password -AsPlainText -Force
+    $cred = New-Object System.Management.Automation.PSCredential $username,$password
+    {{ command }} -Credential $cred
