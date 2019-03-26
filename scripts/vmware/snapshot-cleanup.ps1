@@ -3,8 +3,8 @@
    ===========================================================================
     Created with:  Visual Studio Code
     Created on:    4/24/2018
-    Created by:    koca013636
-    Organization:  Methodist Health System
+    Created by:    Calvin Kohler-Katz
+    Organization:  
     Filename:      snapshot-cleanup\snapshot-cleanup.ps1
    ===========================================================================
    DESCRIPTION
