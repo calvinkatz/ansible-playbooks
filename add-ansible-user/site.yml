@@ -1,0 +1,8 @@
+---
+- name: Add Ansible user to servers
+  vars:
+    add_user: "{{ lookup('env', 'USER') }}"
+  hosts: all
+  gather_facts: no
+  roles:
+    - common

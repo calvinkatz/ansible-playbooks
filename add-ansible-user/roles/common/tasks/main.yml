@@ -1,0 +1,28 @@
+---
+- name: Add Host Fingerprint
+  shell: ssh-keyscan -H "{{ inventory_hostname }}" >> ~/.ssh/known_hosts
+  delegate_to: localhost
+
+- name: Create Ansible User
+  vars:
+    ansible_user: "{{ lookup('env', 'ROOT_USER') }}"
+    ansible_password: "{{ lookup('env', 'ROOT_PASS') }}"
+    ansible_sudo_pass: "{{ lookup('env', 'ROOT_PASS') }}"
+  block:
+    - name: Create | Ansible User
+      become: true
+      user:
+        name: "{{ add_user }}"
+        shell: /bin/bash
+    - name: Copy | sudoers file for Ansible User
+      become: true
+      template:
+        src: ansible_sudoers.j2
+        dest: /etc/sudoers.d/ansible
+    - name: Setup | Autherize key upload
+      become: true
+      authorized_key:
+        user: "{{ add_user }}"
+        key: "{{ lookup('env', 'SSH_KEY') }}"
+        path: '/home/{{ add_user }}/.ssh/authorized_keys'
+        manage_dir: no
